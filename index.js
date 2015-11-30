@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-import Gpio from 'pigpio';
+import { Gpio } from 'pigpio';
 import { Peripheral } from 'raspi-peripheral';
 
 export class SoftPWM extends Peripheral {
@@ -47,9 +47,9 @@ export class SoftPWM extends Peripheral {
     
     this.range = range;
     
-    this.pwm = new Gpio(this.pins[0], {mode: Gpio.OUTPUT}).GPIO; 
-    this.pwm.pwmRange(this.range);
-    this.pwm.pwmFrequency(this.frequency);
+    this.pwm = new Gpio(this.pins[0], {mode: Gpio.OUTPUT}); 
+    this.pwm.pwmRange(range);
+    this.pwm.pwmFrequency(frequency);
   }
 
   write(value) {

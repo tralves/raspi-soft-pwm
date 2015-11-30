@@ -31,3 +31,7 @@ node_modules
 .idea
 .vscode
 jsconfig.json
+
+# Apple stuff
+.AppleDouble
+.DS_Store
