@@ -40,7 +40,6 @@ npm install raspi-soft-pwm
 var raspi = require('raspi-io');
 var five = require('johnny-five');
 var SoftPWM = require('raspi-soft-pwm').SoftPWM;
-var PWM = require('raspi-pwm').PWM;
 var board = new five.Board({
   io: new raspi()
 });
@@ -50,7 +49,7 @@ board.on('ready', function() {
   dutyCycle = 100;
   
   setInterval(function () {
-    softPWM.writeAnalog(dutyCycle);
+    softPWM.write(dutyCycle);
 
     dutyCycle += 50;
     if (dutyCycle > 200) {
