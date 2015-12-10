@@ -25,41 +25,31 @@ THE SOFTWARE.
 import { Gpio } from 'pigpio';
 import { Peripheral } from 'raspi-peripheral';
 
+const _pwm = Symbol();
+const _range = Symbol();
+
 export class SoftPWM extends Peripheral {
   constructor(config) {
-    let pin = 'PWM0';
-    let frequency = 800;
-    let range = 255;
     if (typeof config == 'number' || typeof config == 'string') {
-      pin = config;
-    } else if (typeof config == 'object') {
-      if (typeof config.pin == 'number' || typeof config.pin == 'string') {
-        pin = config.pin;
-      }
-      if (typeof config.frequency == 'number') {
-        frequency = config.frequency;
-      }
-      if (typeof config.range == 'number') {
-        range = config.range;
-      }
+      config = { pin: config };
     }
-    super(pin);
-    
-    this.range = range;
-    
-    this.pwm = new Gpio(this.pins[0], {mode: Gpio.OUTPUT}); 
-    this.pwm.pwmRange(range);
-    this.pwm.pwmFrequency(frequency);
+    super(config.pin);
+    (({ pin = 'PWM0', frequency = 800, range = 255}) => {
+      this[_range] = range;
+      this[_pwm] = new Gpio(this.pins[0], {mode: Gpio.OUTPUT}); 
+      this[_pwm].pwmRange(range);
+      this[_pwm].pwmFrequency(frequency);
+    })(config);
   }
 
   write(value) {
     if (!this.alive) {
       throw new Error('Attempted to write to a destroyed peripheral');
     }
-    if (typeof value != 'number' || value < 0 || value > this.range) {
+    if (typeof value != 'number' || value < 0 || value > this[_range]) {
       throw new Error('Invalid PWM value ' + value);
     }
     
-    this.pwm.analogWrite(value);
+    this[_pwm].analogWrite(value);
   }
 }
