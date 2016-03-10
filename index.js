@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 import { Gpio } from 'pigpio';
 import { Peripheral } from 'raspi-peripheral';
+import { getPins } from 'raspi-board';
 
 const _pwm = Symbol();
 const _range = Symbol();
@@ -36,7 +37,7 @@ export class SoftPWM extends Peripheral {
     super(config.pin);
     (({ pin = 'PWM0', frequency = 800, range = 255}) => {
       this[_range] = range;
-      this[_pwm] = new Gpio(this.pins[0], {mode: Gpio.OUTPUT}); 
+      this[_pwm] = new Gpio(this.pinToGPIO(this.pins[0]), {mode: Gpio.OUTPUT}); 
       this[_pwm].pwmRange(range);
       this[_pwm].pwmFrequency(frequency);
     })(config);
@@ -52,4 +53,21 @@ export class SoftPWM extends Peripheral {
     
     this[_pwm].analogWrite(value);
   }
+
+  pinToGPIO(pin) {
+    const pins = getPins()[pin].pins;
+    const gpioRegex = /GPIO([\d]+)/;
+  
+    let result;
+    let i;
+    
+    for (i = 0; i < pins.length; i++) {
+      result = gpioRegex.exec(pins[i]);
+      if (result !== null) {
+        return parseInt(result[1],10);
+      }
+    }
+    return null;
+  }
+
 }
