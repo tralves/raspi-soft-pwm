@@ -5,8 +5,6 @@ Raspi SOFT PWM
 
 Raspi Soft PWM is part of the [Raspi.js suite](https://github.com/bryan-m-hughes/raspi) that provides software PWM through [pigpio](https://github.com/fivdi/pigpio).
 
-If you have a bug report, feature request, or wish to contribute code, please be sure to check out the [Contributing Guide](blob/master/CONTRIBUTING.md).
-
 ## Installation
 
 ```Shell
