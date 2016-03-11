@@ -24,7 +24,7 @@ var board = new five.Board({
 });
 
 board.on('ready', function() {
-  var softPWM = new SoftPWM({pin: 'P1-26', range:100});
+  var softPWM = new SoftPWM({pin: 'P1-26', range: 100, frequency: 200});
   dutyCycle = 0;
   
   setInterval(function () {
