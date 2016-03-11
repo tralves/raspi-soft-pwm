@@ -1,5 +1,5 @@
-Raspi PWM
-==========
+Raspi SOFT PWM
+==============
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nebrius/raspi-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -24,14 +24,14 @@ var board = new five.Board({
 });
 
 board.on('ready', function() {
-  var softPWM = new SoftPWM(8);
-  dutyCycle = 100;
+  var softPWM = new SoftPWM({pin: 'P1-26', range:100});
+  dutyCycle = 0;
   
   setInterval(function () {
     softPWM.write(dutyCycle);
 
-    dutyCycle += 50;
-    if (dutyCycle > 200) {
+    dutyCycle += 10;
+    if (dutyCycle > 100) {
       dutyCycle = 0;
     }
   }, 2000);
