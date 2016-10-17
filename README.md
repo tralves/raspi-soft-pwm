@@ -125,7 +125,7 @@ Note: The PWM does not start outputting a signal until write is called for the f
 
 ## Credits
 
-This package was largely based on [Bryan Hughes](https://github.com/nebrius)' work and advice. He is the creator of [raspi}(https://github.com/nebrius/raspi).
+This package was largely based on [Bryan Hughes](https://github.com/nebrius)' work and advice. He is the creator of [raspi](https://github.com/nebrius/raspi).
 Also, [Brian Cooke](https://github.com/fivdi), creator of [pigpio](https://github.com/fivdi/pigpio), the package that actually does all the work.
 
 License
