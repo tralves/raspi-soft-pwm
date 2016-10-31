@@ -96,6 +96,12 @@ _Arguments_:
   </tr>
 </table>
 
+### Instance Properties
+
+#### range
+
+A number representing the range initialization value. If a value for `range` was passed to the constructor, it is reflected back here. If no value for `range` was passed to the constructor, then this reflects the default range value, 255.
+
 ### Instance Methods
 
 #### write(value)

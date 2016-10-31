@@ -43,6 +43,10 @@ export class SoftPWM extends Peripheral {
     })(config);
   }
 
+  get range() {
+    return this[_range];
+  }
+
   write(value) {
     if (!this.alive) {
       throw new Error('Attempted to write to a destroyed peripheral');
