@@ -28,23 +28,31 @@ import { getPins } from 'raspi-board';
 
 const _pwm = Symbol();
 const _range = Symbol();
+const _frequency = Symbol();
 
 export class SoftPWM extends Peripheral {
   constructor(config) {
     if (typeof config == 'number' || typeof config == 'string') {
       config = { pin: config };
     }
-    super(config.pin);
-    (({ pin = 'PWM0', frequency = 800, range = 255}) => {
-      this[_range] = range;
-      this[_pwm] = new Gpio(this.pinToGPIO(this.pins[0]), {mode: Gpio.OUTPUT}); 
-      this[_pwm].pwmRange(range);
-      this[_pwm].pwmFrequency(frequency);
-    })(config);
+    const { pin, frequency = 800, range = 255 } = config;
+    if (!pin) {
+      throw new Error('A pin must be specified');
+    }
+    super(pin);
+    this[_range] = range;
+    this[_frequency] = frequency;
+    this[_pwm] = new Gpio(this.pinToGPIO(this.pins[0]), {mode: Gpio.OUTPUT});
+    this[_pwm].pwmRange(range);
+    this[_pwm].pwmFrequency(frequency);
   }
 
   get range() {
     return this[_range];
+  }
+
+  get frequency() {
+    return this[_frequency];
   }
 
   write(value) {
@@ -54,17 +62,17 @@ export class SoftPWM extends Peripheral {
     if (typeof value != 'number' || value < 0 || value > this[_range]) {
       throw new Error('Invalid PWM value ' + value);
     }
-    
+
     this[_pwm].analogWrite(value);
   }
 
   pinToGPIO(pin) {
     const pins = getPins()[pin].pins;
     const gpioRegex = /GPIO([\d]+)/;
-  
+
     let result;
     let i;
-    
+
     for (i = 0; i < pins.length; i++) {
       result = gpioRegex.exec(pins[i]);
       if (result !== null) {

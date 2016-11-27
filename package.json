@@ -1,11 +1,11 @@
 {
   "name": "raspi-soft-pwm",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Provides access to Soft PWM on the Raspberry Pi as part of the Raspi.js library suite",
   "main": "lib/index.js",
   "dependencies": {
-    "raspi-peripheral": "1.6.0",
-    "pigpio": "^0.3.2"
+    "pigpio": "^0.3.2",
+    "raspi-peripheral": "^1.6.1"
   },
   "devDependencies": {
     "del": "^2.0.2",
@@ -17,7 +17,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "sh install-pigpio.sh"
+    "preinstall": "sh install-pigpio.sh",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
