@@ -14,25 +14,19 @@ npm install raspi-soft-pwm
 ## Example Usage
 
 ```JavaScript
-var raspi = require('raspi-io');
-var five = require('johnny-five');
+var raspi = require('raspi');
 var SoftPWM = require('raspi-soft-pwm').SoftPWM;
-var board = new five.Board({
-  io: new raspi()
-});
 
-board.on('ready', function() {
-  var softPWM = new SoftPWM({pin: 'P1-26', range: 100, frequency: 200});
-  dutyCycle = 0;
-  
-  setInterval(function () {
-    softPWM.write(dutyCycle);
-
-    dutyCycle += 10;
-    if (dutyCycle > 100) {
-      dutyCycle = 0;
+raspi.init(function() {
+  var pwm = new SoftPWM('GPIO17');
+  let value = 0;
+  setInterval(() => {
+    pwm.write(value);
+    value++;
+    if (value === pwm.range) {
+      value = 0;
     }
-  }, 2000);
+  }, 10);
 });
 ```
 
@@ -48,7 +42,7 @@ Be sure to read the [full list of pins](https://github.com/nebrius/raspi-io/wiki
 
 ### new SoftPWM(config)
 
-Instantiates a new PWM instance on the given pin. 
+Instantiates a new PWM instance on the given pin.
 
 _Arguments_:
 
