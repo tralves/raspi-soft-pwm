@@ -1,4 +1,8 @@
-## 2.0.0 (--)
+## 2.0.1 (--)
+
+- Fixed a bug with sending fractional values in
+
+## 2.0.0 (2016-11-28)
 
 - Added `frequency` getter
 - BREAKING CHANGE: Removed default pin value
