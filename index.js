@@ -63,7 +63,7 @@ export class SoftPWM extends Peripheral {
       throw new Error('Invalid PWM value ' + value);
     }
 
-    this[_pwm].analogWrite(value);
+    this[_pwm].analogWrite(Math.round(value));
   }
 
   pinToGPIO(pin) {
