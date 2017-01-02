@@ -36,7 +36,7 @@ export class SoftPWM extends Peripheral {
       config = { pin: config };
     }
     const { pin, frequency = 800, range = 255 } = config;
-    if (!pin) {
+    if (typeof pin === 'undefined') {
       throw new Error('A pin must be specified');
     }
     super(pin);
