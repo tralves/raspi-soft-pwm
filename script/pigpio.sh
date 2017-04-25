@@ -1,7 +1,7 @@
 #!/bin/sh
 # The MIT License (MIT)
 #
-# Copyright (c) 2016 Tiago Alves <tralves@gmail.com>
+# Copyright (c) 2017 Bryan Hughes <bryan@nebri.us>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# This script was based on Bryan Hughes' install-wiringpi.sh 
-# (https://github.com/nebrius/raspi-wiringpi/blob/master/install-wiringpi.sh)
-
-CLONE_DIR=$(mktemp -d)
-cd $CLONE_DIR
-
-# Check if Wiring Pi is already installed
-if command -v pigpiod >/dev/null 2>&1
-then
-  echo "pigpio is already installed, skipping\n"
+# Quick and dirty check to see if we're on a Raspberry Pi or not
+if ! [ -f /proc/cpuinfo ]; then
+  echo "not on a Raspberry Pi, skipping installation"
   exit 0
 fi
 
-# Check if git is installed or not
-if !(command -v git >/dev/null 2>&1)
+if command -v pigpiod -v >/dev/null 2>&1
 then
-  echo "You must install git before installing pigpio\n"
-  exit 1
+  echo "pigpio is already installed, skipping installation"
+  exit 0
 fi
 
-echo "\nDownloading pigpio...\n"
-git clone https://github.com/joan2937/pigpio || { echo "Could not download pigpio\n"; exit 1; }
-cd pigpio
-
-echo "\nBuilding pigpio. You may be asked for your root password.\n"
-make
-sudo make install|| { echo "Could not install pigpio\n"; exit 1; }
-sudo rm -r $CLONE_DIR
+echo "pigpio doesn't appear to be installed, installing now. You may be asked for your password."
+sudo apt-get install pigpio
