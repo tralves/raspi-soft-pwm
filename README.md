@@ -1,3 +1,6 @@
+# Deprecated!
+The package `raspi-soft-pwm` will no longer be maintained by me, but will continue in the repo [nebrius/raspi-soft-pwm](https://github.com/nebrius/raspi-soft-pwm).
+
 Raspi SOFT PWM
 ==============
 
