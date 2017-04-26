@@ -3,30 +3,45 @@ Raspi SOFT PWM
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nebrius/raspi-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Raspi Soft PWM is part of the [Raspi.js suite](https://github.com/bryan-m-hughes/raspi) that provides software PWM through [pigpio](https://github.com/fivdi/pigpio).
+Raspi Soft PWM is part of the [Raspi.js suite](https://github.com/nebrius/raspi) that provides software PWM through [pigpio](https://github.com/fivdi/pigpio).
+
+If you have a bug report, feature request, or wish to contribute code, please be sure to check out the [Contributing Guide](blob/master/CONTRIBUTING.md).
 
 ## Installation
+
+First, be sure that you have installed [raspi](https://github.com/nebrius/raspi).
+
+Install with NPM:
 
 ```Shell
 npm install raspi-soft-pwm
 ```
 
+**Note:** this project is written in [TypeScript](http://www.typescriptlang.org/) and includes type definitions in the package.json file. This means that if you want to use it from TypeScript, you don't need to install a separate @types module.
+
 ## Example Usage
 
-```JavaScript
-var raspi = require('raspi');
-var SoftPWM = require('raspi-soft-pwm').SoftPWM;
+In TypeScript/ES6:
 
-raspi.init(function() {
-  var pwm = new SoftPWM('GPIO17');
-  let value = 0;
-  setInterval(() => {
-    pwm.write(value);
-    value++;
-    if (value === pwm.range) {
-      value = 0;
-    }
-  }, 10);
+```TypeScript
+import { init } from 'raspi';
+import { PWM } from 'raspi-pwm';
+
+init(() => {
+  const led = new PWM('GPIO22');
+  led.write(0.5); // 50% Duty Cycle, half brightness
+});
+```
+
+In JavaScript:
+
+```JavaScript
+const raspi = require('raspi');
+const pwm = require('raspi-pwm');
+
+raspi.init(() => {
+  const led = new pwm.PWM('GPIO22');
+  led.write(0.5); // 50% Duty Cycle, aka half brightness
 });
 ```
 
@@ -34,7 +49,7 @@ raspi.init(function() {
 
 The pins on the Raspberry Pi are a little complicated. There are multiple headers on some Raspberry Pis with extra pins, and the pin numbers are not consistent between Raspberry Pi board versions.
 
-To help make it easier, you can specify pins in three ways. The first is to specify the pin by function, e.g. ```'GPIO18'```. The second way is to specify by pin number, which is specified in the form "P[header]-[pin]", e.g. ```'P1-7'```. The final way is specify the [Wiring Pi virtual pin number](http://wiringpi.com/pins/), e.g. ```7```. If you specify a number instead of a string, it is assumed to be a Wiring Pi number.
+To help make it easier, you can specify pins in three ways. The first is to specify the pin by function, e.g. `'GPIO18'`. The second way is to specify by pin number, which is specified in the form "P[header]-[pin]", e.g. `'P1-7'`. The final way is specify the [Wiring Pi virtual pin number](http://wiringpi.com/pins/), e.g. `7`. If you specify a number instead of a string, it is assumed to be a Wiring Pi number.
 
 Be sure to read the [full list of pins](https://github.com/nebrius/raspi-io/wiki/Pin-Information) on the supported models of the Raspberry Pi.
 
@@ -73,17 +88,12 @@ _Arguments_:
         <tr>
           <td>pin (optional)</td>
           <td>Number | String</td>
-          <td>The pin number or descriptor for the peripheral</td>
-        </tr>
-        <tr>
-          <td>range (optional)</td>
-          <td>Number</td>
-          <td>Sets the range register in the PWM peripheral. This value controls how <em>many</em> clock cycles are used in one period. Please refer to the pigpio documentation of [Gpio.pwmRange(range)](https://github.com/fivdi/pigpio/blob/master/doc/gpio.md#pwmrangerange). *Default: 255*</td>
+          <td>The pin number or descriptor for the peripheral. Defaults to 1 (GPIO18, PWM0).</td>
         </tr>
         <tr>
           <td>frequency (optional)</td>
           <td>Number</td>
-          <td>Sets the frequency in the PWM peripheral. Please refer to the pigpio documentation of [Gpio.pwmFrequency(frequency)](https://github.com/fivdi/pigpio/blob/master/doc/gpio.md#pwmfrequencyfrequency). *Default: 800*</td>
+          <td>The frequency, in Hz, of the PWM signal. Defaults to 50.</td>
         </tr>
       </table>
     </td>
@@ -94,17 +104,13 @@ _Arguments_:
 
 #### frequency
 
-A number representing the PWM frequency.
-
-#### range
-
-A number representing the PWM range.
+A number representing the frequency initialization value, in Hz. If a value for `frequency` was passed to the constructor, it is reflected back here. If no value for `frequency` was passed to the constructor, then this reflects the default frequency value of `50`.
 
 ### Instance Methods
 
-#### write(value)
+#### write(dutyCycle)
 
-Sets the duty cycle for the PWM output.
+Sets the duty cycle for the PWM output, a floating point value between 0 and 1.
 
 _Arguments_:
 
@@ -117,15 +123,15 @@ _Arguments_:
     </tr>
   </thead>
   <tr>
-    <td>value</td>
+    <td>dutyCycle</td>
     <td>Number</td>
-    <td>The duty cycle for the PWM to set, must be between 0 and range</td>
+    <td>The duty cycle for the PWM to set, must be a floating point number between 0 and 1</td>
   </tr>
 </table>
 
 _Returns_: None
 
-Note: The PWM does not start outputting a signal until write is called for the first time.
+**Note:** The PWM does not start outputting a signal until write is called for the first time.
 
 ## Credits
 
@@ -137,7 +143,7 @@ License
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Tiago Alves tralves@gmail.com
+Copyright (c) 2016 Tiago Alves <tralves@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
